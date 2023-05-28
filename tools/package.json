@@ -1,0 +1,31 @@
+{
+  "name": "hackathon",
+  "version": "0.1.0",
+  "description": "Benchmark tools",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf ./dist/*",
+    "start": "ts-node ./src/index.ts",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier src/**/*.ts --write",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zandre",
+  "devDependencies": {
+    "@types/glob": "7.1.3",
+    "@types/node": "15.6.1",
+    "@typescript-eslint/eslint-plugin": "4.26.0",
+    "@typescript-eslint/parser": "4.26.0",
+    "eslint": "7.27.0",
+    "prettier": "2.3.0",
+    "typescript": "4.3.2"
+  },
+  "dependencies": {
+    "commander": "7.2.0",
+    "console-table-printer": "2.9.0",
+    "glob": "7.1.7",
+    "node-uname": "3.0.4",
+    "ts-node": "10.0.0"
+  }
+}
