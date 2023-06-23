@@ -1,13 +1,17 @@
 using System.Diagnostics;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Zandre;
 
 public static class Benchmark
 {
-    public static string CalculateBenchmark(int timeInMilliseconds)
+    public static async Task<string> CalculateBenchmark(int timeInMilliseconds)
     {
-        var verifiedValue = DoWork();
-        if (verifiedValue < 0)
+        var algorithmResult = DoWork();
+        var isSuccessfulAlgorithm = await VerifyAlgorithmOutput(algorithmResult);
+        if (!isSuccessfulAlgorithm)
         {
             throw new Exception("The value should be positive");
         }
@@ -24,11 +28,36 @@ public static class Benchmark
         return $"{counter};{totalSeconds};";
     }
 
-    public static int DoWork()
+    public static int[] DoWork()
     {
+        var result = new List<int>();
         var randomGenerator = new Random();
-        var value = randomGenerator.Next((int)DateTime.UtcNow.Microsecond);
-        return value;
+        result.Add(randomGenerator.Next((int)DateTime.UtcNow.Microsecond));
+        result.Add(randomGenerator.Next((int)DateTime.UtcNow.Microsecond));
+        result.Add(randomGenerator.Next((int)DateTime.UtcNow.Microsecond));
+        result.Add(randomGenerator.Next((int)DateTime.UtcNow.Microsecond));
+        result.Add(randomGenerator.Next((int)DateTime.UtcNow.Microsecond));
+        return result.ToArray();
     }
 
+    public static async Task<bool> VerifyAlgorithmOutput(int[] algorithmOutput)
+    {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Post, "https://hackathon-validator.vercel.app/api/verify");
+        var content = new StringContent(JsonSerializer.Serialize(algorithmOutput), null, "application/json");
+        request.Content = content;
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var result = await response.Content.ReadFromJsonAsync<VerificationResponse>();
+        return result?.Success ?? false;
+    }
+
+}
+
+public class VerificationResponse
+{
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
 }
