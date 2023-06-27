@@ -1,0 +1,14 @@
+# Use an official Java JDK as the base image
+FROM openjdk:11-jdk-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Java source code to the container
+COPY src /app/src
+
+# Compile the Java source code
+RUN javac src/*.java
+
+# Set the command to run your Java application
+CMD ["java", "-cp", "src", "Main"]
