@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <vector>
+#include <list>
 #include <cmath>
 #include <map>
 
@@ -107,9 +108,14 @@ int main() {
     auto worker = Worker();
     auto http = Http();
 
-    array<int,8> ar = {1,2,3,4,5,6,7,8};
+    list<int> ar;
     string s;
     stringstream o;
+    ar.push_back(5);
+    ar.push_back(6);
+    ar.push_back(7);
+    ar.push_back(8);
+    
     o << "\"[";
     for(int x : ar)
     {
