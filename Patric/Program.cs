@@ -9,7 +9,7 @@ public static class Program
 {
     private static readonly ConcurrentBag<byte> Iterations = new();
     private static readonly Stopwatch Stopwatch= new();
-    private const double miliSeconds = 4950;
+    private const double MilliSeconds = 4990;
     
     public static async Task Main()
     {
@@ -23,7 +23,7 @@ public static class Program
         //BENCHMARK Starts
         Stopwatch.Start();
         ParallelEx.While(options,
-             () => Stopwatch.Elapsed.TotalMilliseconds < miliSeconds, Body);
+             () => Stopwatch.Elapsed.TotalMilliseconds < MilliSeconds, Body);
         ;
         var iterations = Iterations.Count;
         Stopwatch.Stop();
@@ -33,7 +33,7 @@ public static class Program
 
     private static async void Body(ParallelLoopState _)
     {
-        while (Stopwatch.Elapsed.TotalMilliseconds < miliSeconds )
+        while (Stopwatch.Elapsed.TotalMilliseconds < MilliSeconds )
         {
             //await DoWork();
             for (var i = 0; i < 100000; i++)
