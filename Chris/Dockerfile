@@ -1,14 +1,20 @@
-# Base image
-FROM gcc:latest
+FROM ubuntu:22.04 AS build
 
-# Set the working directory inside the container
-WORKDIR /app
+RUN apt-get update -qq \
+  && apt-get install -y clang \
+  && apt-get install -y libcurl4-gnutls-dev
 
-# Copy the C++ source code to the container
-COPY . /app
 
-# Compile the C++ program
-RUN g++ -o program main.cpp
+WORKDIR /opt/app
+COPY *.cpp .
+COPY *.hpp .
 
-# Set the entry point
-ENTRYPOINT ["./program"]
+RUN clang++ -Ofast -std=c++17 main.cpp -o main -lcurl
+
+FROM ubuntu:22.04
+RUN apt-get update -qq \
+  && apt-get install -y libcurl4-gnutls-dev
+
+COPY --from=build /opt/app/main /usr/local/bin
+
+ENTRYPOINT [ "main" ]

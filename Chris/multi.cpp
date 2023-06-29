@@ -74,31 +74,45 @@ class  HTTP
 class Worker
 {
   public:
-    string Benchmark()
-    {
-      HTTP http;
-      if(http.makeReq(the_work()))
-      {
-        int count = 0;
-        string retro = "";
-        auto timerStart = steady_clock::now();
-        while(true)
-        {
-          the_work();
-          count++;
-          if(duration_cast<seconds>(steady_clock::now() - timerStart).count() >= 5)
-          {
+    string Benchmark() {
+        HTTP http;
+        if (http.makeReq(the_work())) {
+            auto timerStart = steady_clock::now();
+            int count = 0;
+            string retro = "";
+            bool stop = false;
+            
+            // Start multiple threads
+            const int numThreads = std::thread::hardware_concurrency();
+            std::vector<std::thread> threads;
+            threads.reserve(numThreads);
+            
+            for (int i = 0; i < numThreads; ++i) {
+                threads.emplace_back([this, &timerStart, &count, &stop] {
+                    while (!stop) {
+                        the_work();
+                        count++;
+                        if (duration_cast<seconds>(steady_clock::now() - timerStart).count() >= 5) {
+                            stop = true;
+                            break;
+                        }
+                    }
+                });
+            }
+            
+            // Wait for all threads to finish
+            for (auto& thread : threads) {
+                thread.join();
+            }
+            
             float result = duration_cast<microseconds>(steady_clock::now() - timerStart).count() / 1000000.0;
             retro += to_string(count) + ";" + to_string(result) + ";";
-            break;
-          }
+            
+            return retro;
         }
-        return retro;
-      }
-      else
-      {
-        return "Error";
-      }
+        else {
+            return "Error";
+        }
     }
 
     string the_work()
