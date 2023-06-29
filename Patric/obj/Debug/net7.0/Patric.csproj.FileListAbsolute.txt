@@ -1,0 +1,13 @@
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.csproj.AssemblyReference.cache
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.GeneratedMSBuildEditorConfig.editorconfig
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.AssemblyInfoInputs.cache
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.AssemblyInfo.cs
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.csproj.CoreCompileInputs.cache
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/bin/Debug/net7.0/Patric
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/bin/Debug/net7.0/Patric.deps.json
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/bin/Debug/net7.0/Patric.runtimeconfig.json
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/bin/Debug/net7.0/Patric.dll
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.dll
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/refint/Patric.dll
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/Patric.genruntimeconfig.cache
+/Users/patricedwards/Desktop/Hackathon/Hackathon1/Patric/obj/Debug/net7.0/ref/Patric.dll
