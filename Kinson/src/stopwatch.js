@@ -5,16 +5,15 @@ class Stopwatch {
   }
 
   start() {
-    this.startTime = new Date();
+    this.startTime = Date.now();
   }
 
   stop() {
-    this.endTime = new Date();
+    this.endTime = Date.now();
   }
 
   getElapsedMilliseconds() {
-    const currentTime = new Date();
-    return currentTime - this.startTime;
+    return Date.now() - this.startTime;
   }
 
   getElapsedTicks() {
