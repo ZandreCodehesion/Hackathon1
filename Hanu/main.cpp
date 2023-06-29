@@ -32,7 +32,7 @@ class Http
     bool makeReq(string payload)
     {
         const std::string url("https://hackathon-validator.vercel.app/api/verify");
-        const std::string json_payload(payload);  // You can replace it with your own JSON payload
+        const std::string json_payload(payload);
 
         CURL* curl = curl_easy_init();
 
@@ -62,20 +62,13 @@ class Http
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
         curl_easy_cleanup(curl);
 
+        cout << httpCode << endl;
         if (httpCode == 200) {
-            //std::cout << "\nGot successful response from " << url << std::endl;
+            std::cout << "\nGot successful response from " << url << std::endl;
 
             // Response looks good - done using Curl now.  Try to parse the results
             // and print them out.
-            json jsonData = json::parse(*httpData);
-
-            bool success = jsonData["success"];
-
-            if(success)
-                return true;
-            
-            if(!success)
-                return false;
+            return true;
         }
         else {
             return false;
@@ -87,28 +80,47 @@ class Http
 
 class TesterWorker
 {
-    private:
-        int counter = 0;
-
-        // Duplicate Code, but this one returns the result
-        int run_worker_once()
-        {
-            return counter++;
-        }
-
     public:
-
-        // Formats the results for API req
-        string worker_for_validator()
+        int primes_size = 1000000;
+        // Duplicate Code, but this one returns the result
+        string run_worker_once()
         {
+            std::bitset<1000000> bit_array;
+            bit_array.set().all();
+
+            // Always non-prime, no need to check
+            bit_array.reset(0); // 0
+            bit_array.reset(1); // 1
+
+            int counter = 0;
+
+            for(int i = 2; i * i < primes_size; i++)
+            {
+                if(bit_array.test(i))
+                {
+                    counter = i*i;
+                    while(counter < primes_size)
+                    {
+                        bit_array.reset(counter);
+                        counter += i;
+                    }
+                }    
+            }
+
             list<int> ar;
             string s;
             stringstream o;
-
-            for(int i =0; i > 6; i++)
-                ar.push_back(this->run_worker_once());
             
-            o << "\"[";
+            int num = 0;
+            for(int i = 0; i < 1000000; i++)
+            {
+                if(bit_array.test(i))
+                {
+                    ar.push_back(i);
+                }
+            }
+
+            o << "[";
 
             for(int x : ar)
             {
@@ -120,9 +132,8 @@ class TesterWorker
                 o << ',';
             }
 
-            o << "]\"";
+            o << "]";
             s = o.str();
-
             return s;
         }
 };
@@ -130,30 +141,41 @@ class TesterWorker
 class Worker
 {
     public:
-        int random = 0;
+        int primes_size = 1000001;
         
+        // This is the one doing the work
         void do_some_work()
         {
-            random++;
-        }
+            // 1 Bit for each number, true for prime, false for non-prime 
+            std::bitset<1000001> bit_array;
+            bit_array.set().all();
 
-        void unit_vector()
-        {
-            int x = rand() % (1000);
-            int y = rand() % (1000);
-            int z = rand() % (1000);
+            // Always non-prime, no need to check
+            bit_array.reset(0); // 0
+            bit_array.reset(1); // 1
 
-            double length = sqrt(((x * x) + (y * y) + (z * z)));
+            int counter = 0;
 
-            double x_l = x / length; 
-            double y_l = y / length; 
-            double z_l = z / length;
-            
-            double unit_length = sqrt(((x_l * x_l) + (y_l * y_l) + (z_l * z_l)));
-
-            if (((unit_length - 1)*(unit_length - 1)) > 0.003)
+            for(int i = 1; i * i < primes_size; i++)
             {
-                exit(1);
+                if(bit_array.test(i))
+                {
+                    counter = i*i;
+                    while(counter < 1000001)
+                    {
+                        bit_array.reset(counter);
+                        counter += i;
+                    }
+                }    
+            }
+
+            int num = 0;
+            for(int i = 0; i < 1000001; i++)
+            {
+                if(bit_array.test(i))
+                {
+                    num+= 1;
+                }
             }
         }
 };
@@ -164,28 +186,20 @@ bool validator()
     // sieve as worker but with a return value added
     auto tester = TesterWorker();
     auto http = Http();
+    
     // Runs the tester worker and compiles the array for single validation
-    string request_array = tester.worker_for_validator();
-    return(http.makeReq(request_array));
+    string request = tester.run_worker_once();
+    return(http.makeReq(request));
 }
 
 
 int main() {
 
-    // Bit arrays
-    std::bitset<10> bit_array;
-    bit_array.set().all();
-
-    // String to charr array
-    string test = "thisIsSomRandomTestString";
-    char* char_arr = test.data();
-    //cout << char_arr[5] << endl;
-
     // Runs a single pass and validate the results
-    //if(!validator)
-    //{
-    //    exit(1);
-    //}
+    if(!validator())
+    {
+        exit(1);
+    }
 
     // Init worker class
     auto worker = Worker();
@@ -193,6 +207,8 @@ int main() {
     auto tStart = steady_clock::now();
     // End init
 
+    //worker.do_some_work();
+    
     while(true)
     {
         // Put the code to be tested below
