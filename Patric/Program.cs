@@ -32,8 +32,11 @@ public static class Program
     {
         while (Stopwatch.Elapsed.TotalSeconds < 5)
         {
-            await DoWork();
-            Iterations.Add(1);
+            for (var i = 0; i < 100; i++)
+            {
+                await DoWork();
+                Iterations.Add(1);
+            }
         }
     }   
 
