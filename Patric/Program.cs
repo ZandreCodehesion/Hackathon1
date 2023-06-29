@@ -9,7 +9,7 @@ public static class Program
 {
     private static readonly ConcurrentBag<byte> Iterations = new();
     private static readonly Stopwatch Stopwatch= new();
-    private const double MilliSeconds = 4990;
+    private const double MilliSeconds = 4940;
     private const int Mil = 1_000_000;
     public static async Task Main()
     {
