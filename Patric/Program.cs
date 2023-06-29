@@ -9,7 +9,8 @@ public static class Program
 {
     private static readonly ConcurrentBag<byte> Iterations = new();
     private static readonly Stopwatch Stopwatch= new();
-
+    private const double miliSeconds = 4950;
+    
     public static async Task Main()
     {
         var options = new ParallelOptions { MaxDegreeOfParallelism = 4 };
@@ -22,7 +23,7 @@ public static class Program
         //BENCHMARK Starts
         Stopwatch.Start();
         ParallelEx.While(options,
-             () => Stopwatch.Elapsed.TotalMilliseconds < 4900, Body);
+             () => Stopwatch.Elapsed.TotalMilliseconds < miliSeconds, Body);
         ;
         var iterations = Iterations.Count;
         Stopwatch.Stop();
@@ -32,7 +33,7 @@ public static class Program
 
     private static async void Body(ParallelLoopState _)
     {
-        while (Stopwatch.Elapsed.TotalMilliseconds < 4900 )
+        while (Stopwatch.Elapsed.TotalMilliseconds < miliSeconds )
         {
             //await DoWork();
             for (var i = 0; i < 100000; i++)
