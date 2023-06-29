@@ -84,14 +84,56 @@ class Http
     }
 };
 
+class TesterWorker
+{
+    private:
+        int counter = 0;
+
+        // Duplicate Code, but this one returns the result
+        int run_worker_once()
+        {
+            return counter++;
+        }
+
+    public:
+
+        // Formats the results for API req
+        string worker_for_validator()
+        {
+            list<int> ar;
+            string s;
+            stringstream o;
+
+            for(int i =0; i > 6; i++)
+                ar.push_back(this->run_worker_once());
+            
+            o << "\"[";
+
+            for(int x : ar)
+            {
+                o << x;
+
+                if(x == ar.back())
+                    break;    
+
+                o << ',';
+            }
+
+            o << "]\"";
+            s = o.str();
+
+            return s;
+        }
+};
+
 class Worker
 {
     public:
-        int random;
+        int random = 0;
         
         void do_some_work()
         {
-            random = rand() % (1000000);
+            random++;
         }
 
         void unit_vector()
@@ -102,80 +144,58 @@ class Worker
 
             double length = sqrt(((x * x) + (y * y) + (z * z)));
 
-            //cout << x << ',' << y <<',' << z << endl;
-            //cout << length <<endl;
-
             double x_l = x / length; 
             double y_l = y / length; 
             double z_l = z / length;
             
-            //cout<< get<0>(unit_vector) << ',' << get<1>(unit_vector) << ',' << get<2>(unit_vector) << endl;
-
             double unit_length = sqrt(((x_l * x_l) + (y_l * y_l) + (z_l * z_l)));
 
             if (((unit_length - 1)*(unit_length - 1)) > 0.003)
             {
                 exit(1);
             }
-            //cout<< unit_length << endl;
         }
 };
+
+bool validator()
+{   
+    // This fires up a tester class that runs the same
+    // sieve as worker but with a return value added
+    auto tester = TesterWorker();
+    auto http = Http();
+    // Runs the tester worker and compiles the array for single validation
+    string request_array = tester.worker_for_validator();
+    return(http.makeReq(request_array));
+}
 
 
 int main() {
 
     // Bit arrays
-    vector<bool> bit_array;
-    bit_array.assign(5,false);
-    for(auto i = bit_array.begin(); i != bit_array.end(); i++)
-    {*i = true;}
+    bitset<10> bit_array;
+    bit_array.set().all();
 
     // String to charr array
     string test = "thisIsSomRandomTestString";
     char* char_arr = test.data();
     //cout << char_arr[5] << endl;
 
+    // Runs a single pass and validate the results
+    //if(!validator)
+    //{
+    //    exit(1);
+    //}
+
     // Init worker class
     auto worker = Worker();
-    auto http = Http();
-
-    list<int> ar;
-    string s;
-    stringstream o;
-    ar.push_back(5);
-    ar.push_back(6);
-    ar.push_back(7);
-    ar.push_back(8);
-    
-    o << "\"[";
-    for(int x : ar)
-    {
-        o << x;
-        if(x == ar.back())
-            break;    
-        o << ',';
-    }
-    o << "]\"";
-    s = o.str();
-
-    //cout<<s<<'\n';
-
-    if(!(http.makeReq(s)))
-    {
-        exit(1);
-    }
-
-    //worker.unit_vector();
-    // End init
-
     int count = 0;
     auto tStart = steady_clock::now();
+    // End init
 
-    
     while(true)
     {
         // Put the code to be tested below
-        worker.unit_vector();
+        worker.do_some_work();
         // End of tested code
 
         count++;
