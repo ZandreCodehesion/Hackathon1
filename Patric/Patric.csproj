@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <Optimize>true</Optimize>
+        <DebugType>none</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <TieredCompilation>true</TieredCompilation>
+        <Deterministic>true</Deterministic>
+    </PropertyGroup>
+
+</Project>
