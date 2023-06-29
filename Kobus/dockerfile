@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 # Copy the current directory contents into the container at /app
 COPY main.py .
 
-# Install any needed packages
-RUN pip install requests
+# Install any needed packages specified in requirements.txt
+RUN pip install requests httpx asyncio
 
 # Run the application when the container launches
-ENTRYPOINT ["python3", "main.py"]
+CMD ["python3", "main.py"]
