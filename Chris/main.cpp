@@ -3,6 +3,8 @@
 #include <chrono>
 #include <ctime>
 #include <thread>
+#include <cmath>
+#include <vector>
 
 #include <curl/curl.h>
 
@@ -24,6 +26,7 @@ class  HTTP
     bool makeReq(string payload)
     {
       const string url("https://hackathon-validator.vercel.app/api/verify");
+      // cout<<payload<<endl;
       const string json_payload(payload);  // You can replace it with your own JSON payload
 
       CURL* curl = curl_easy_init();
@@ -60,7 +63,6 @@ class  HTTP
         // and print them out.
         json jsonData = json::parse(*httpData);
         bool success = jsonData["success"];
-        string message = jsonData["message"];
 
         return success;
       }
@@ -103,14 +105,44 @@ class Worker
 
     string the_work()
     {
-      if(true)
-      {
-        return "[1,2,3,4,5]";
+      vector<int> primes = findPrimes(999983);
+      string retro = "[2,";
+      for (int i = 1; i < primes.size(); ++i) {
+        retro += to_string(primes[i]);
+        if (i < primes.size() - 1) {
+          retro += ",";
+        }
       }
-      else
-      {
-        return "";
+      retro += "]";
+      return retro;
+    }
+
+    vector<int> findPrimes(int limit) 
+    {
+      vector<int> primes;
+      if (limit >= 2) {
+        primes.push_back(2);
       }
+
+      int sieveSize = (limit - 1) / 2 + 1;
+      bitset<1000000> isComposite; // Use bitset instead of vector<bool>
+      int sqrtLimit = static_cast<int>(sqrt(limit)) + 1;
+
+      for (int i = 3; i <= sqrtLimit; i += 2) {
+        if (!isComposite[i]) {
+          for (int j = i * i; j <= limit; j += 2 * i) {
+            isComposite[j] = true;
+          }
+        }
+      }
+
+      for (int i = 3; i <= limit; i += 2) {
+        if (!isComposite[i]) {
+          primes.push_back(i);
+        }
+      }
+
+      return primes;
     }
 };
 
