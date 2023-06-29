@@ -1,3 +1,3 @@
-const upperCase = require("lodash/upperCase");
+const { benchmark } = require('./helper');
 
-console.log("this is in a docker instance", upperCase("this"));
+benchmark(100);
