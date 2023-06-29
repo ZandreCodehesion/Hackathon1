@@ -9,7 +9,8 @@ public static class Benchmark
 {
     public static async Task<string> CalculateBenchmark(int timeInMilliseconds)
     {
-        var algorithmResult = DoWork();
+        var randomGenerator = new Random();
+        var algorithmResult = DoWork(randomGenerator);
         var isSuccessfulAlgorithm = await VerifyAlgorithmOutput(algorithmResult);
         if (!isSuccessfulAlgorithm)
         {
@@ -20,7 +21,7 @@ public static class Benchmark
         stopwatch.Start();
         while (stopwatch.ElapsedMilliseconds < timeInMilliseconds)
         {
-            DoWork();
+            DoWork(randomGenerator);
             counter++;
         }
         stopwatch.Stop();
@@ -28,10 +29,9 @@ public static class Benchmark
         return $"{counter};{totalSeconds};";
     }
 
-    public static int[] DoWork()
+    public static int[] DoWork(Random randomGenerator)
     {
         var result = new List<int>();
-        var randomGenerator = new Random();
         var x = randomGenerator.Next(1_000);
         var y = randomGenerator.Next(1_000);
         var z = randomGenerator.Next(1_000);
