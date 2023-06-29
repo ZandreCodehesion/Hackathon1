@@ -32,7 +32,7 @@ public static class Program
 
     private static async void Body(ParallelLoopState _)
     {
-        while (Stopwatch.Elapsed.TotalSeconds < 5)
+        while (Stopwatch.Elapsed.TotalMilliseconds < 4900 )
         {
             //await DoWork();
             for (var i = 0; i < 100000; i++)
