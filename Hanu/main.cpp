@@ -175,10 +175,8 @@ class Worker
                 if(bit_array.test(i))
                 {
                     num+= 1;
-                    //cout<< i << ',';
                 }
             }
-            //cout << '\n' << num << '\n';
         }
 };
 
@@ -190,22 +188,12 @@ bool validator()
     auto http = Http();
     
     // Runs the tester worker and compiles the array for single validation
-    //string request_array = 
     string request = tester.run_worker_once();
-
-    //cout << request << endl;
-    //return true;
     return(http.makeReq(request));
 }
 
 
 int main() {
-
-
-    // String to charr array
-    string test = "thisIsSomRandomTestString";
-    char* char_arr = test.data();
-    //cout << char_arr[5] << endl;
 
     // Runs a single pass and validate the results
     if(!validator())
