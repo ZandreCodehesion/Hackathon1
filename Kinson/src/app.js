@@ -1,3 +1,3 @@
 const { benchmark } = require('./helper');
 
-benchmark(100);
+benchmark(5000);
