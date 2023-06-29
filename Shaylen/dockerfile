@@ -11,4 +11,4 @@ COPY src /app/src
 RUN javac src/*.java
 
 # Set the command to run your Java application
-CMD ["java", "-cp", "src", "Main"]
+CMD ["java", "-cp", "src", "App"]
