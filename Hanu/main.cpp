@@ -172,8 +172,8 @@ bool validator()
 int main() {
 
     // Bit arrays
-    bitset<10> bit_array;
-    bit_array.set().all();
+    //bitset<10> bit_array;
+    //bit_array.set().all();
 
     // String to charr array
     string test = "thisIsSomRandomTestString";
