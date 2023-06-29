@@ -194,7 +194,7 @@ fn main() {
         }
     }
 
-    println!("{};{};", parses, total.as_millis());
+    println!("{};{};", parses, total.as_secs_f32());
 
     // let start = Instant::now();
     // let duration = start.elapsed();
