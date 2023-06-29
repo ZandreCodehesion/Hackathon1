@@ -1,33 +1,29 @@
-# 1. builder stage
-#   - run unit tests 
-#   - build executable
-#
+FROM rust:1.70 as builder
 
-# Note: Debian based, not Alpine; for some reason, the 
-# Alpine malloc call is slower than it should be.
-# 
-# Also, immediately run `cargo search` to force
-# cargo to load the package index from crates.io.
-# This allows it to be cached as part of the build
-# layer, saving a lot of time on repeated builds.
-FROM rust:1.70 AS build
-RUN cargo search num_cpus -q --limit 1
+RUN USER=root
 
-WORKDIR /app
-COPY . .
-RUN cargo build --release
+RUN mkdir bot
+WORKDIR /bot
+ADD . ./
+RUN cargo clean && \
+    cargo build -vv --release
 
-# 2. runtime stage
-#   - start from clean container
-#   - copy built executable 
-# 
+FROM debian:bullseye
 
-# Debian base image, not Alpine, for reason noted above
-FROM debian:buster-slim AS runtime
+ARG APP=/usr/src/app
 
-WORKDIR /app
+ENV APP_USER=appuser
 
-# app and configuration
-COPY --from=build /app/target/release/docker docker
+RUN groupadd $APP_USER \
+    && useradd -g $APP_USER $APP_USER \
+    && mkdir -p ${APP}
 
-ENTRYPOINT [ "./docker" ]
+# Copy the compiled binaries into the new container.
+COPY --from=builder /bot/target/release/docker ${APP}/docker
+
+RUN chown -R $APP_USER:$APP_USER ${APP}
+
+USER $APP_USER
+WORKDIR ${APP}
+
+CMD ["./docker"]
