@@ -1,15 +1,14 @@
-import numpy
 import requests
 import time
 import multiprocessing
 
 def primesfrom3to(n):
-    """ Returns a array of primes, 3 <= p < n """
-    sieve = numpy.ones(n//2, dtype=bool)
-    for i in range(3,int(n**0.5)+1,2):
-        if sieve[i//2]:
-            sieve[i*i//2::i] = False
-    return numpy.r_[2, 2*numpy.nonzero(sieve)[0][1::]+1].tolist()  # include 2 and convert to list
+    sieve = [True] * n
+    for x in range(3, int(n**0.5) + 1, 2):
+        for y in range(3, (n//x) + 1, 2):
+            sieve[(x*y) - 1] = False
+
+    return [2] + [i for i in range(3, n, 2) if sieve[i-1]]
 
 class Benchmark:
 
@@ -24,6 +23,7 @@ class Benchmark:
         start_time = time.time()
 
         while time.time() - start_time < time_in_seconds:
+            print("Continuing work...")
             Benchmark.do_work()
             counter += 1
 
@@ -46,7 +46,6 @@ class Benchmark:
         )
         response.raise_for_status()
         result = response.json()
-        print(result)
         return result["success"]
 
 def main():
