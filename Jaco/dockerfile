@@ -1,10 +1,14 @@
-FROM node:18
+# Use an official Java JDK as the base image
+FROM openjdk:11-jdk-slim
 
-# Create app directory
+# Set the working directory in the container
 WORKDIR /app
 
-COPY src /app/src
-#install dependenceis
-RUN npm install 
+# Copy the Java source code to the container
+COPY src /app
 
-CMD [ "node", "/app/src/app.js" ]
+# Compile the Java source code
+RUN javac *.java
+
+# Set the command to run your Java application
+CMD ["java", "main"]
