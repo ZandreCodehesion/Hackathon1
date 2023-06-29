@@ -20,6 +20,8 @@ const verifyService = async (data) => {
 const benchmark = async (timeInMilliseconds) => {
   const data = getPrimeArray(1_000_000);
 
+  console.log(data);
+
   const isVerify = await verifyService(data);
 
   console.log(JSON.stringify({ isVerify }, null, 2));
@@ -35,7 +37,7 @@ const benchmark = async (timeInMilliseconds) => {
     }
     stopwatch.stop();
 
-    const totalSeconds = stopwatch.getElapsedTicks() / 1_000_000_000;
+    const totalSeconds = stopwatch.getElapsedTicks() / 10_000_000;
     console.log(`${counter};${totalSeconds};`)
   } else {
     console.error("Verification failed");
