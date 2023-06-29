@@ -22,10 +22,12 @@ public static class Program
         //BENCHMARK Starts
         Stopwatch.Start();
         ParallelEx.While(options,
-             () => Stopwatch.Elapsed.TotalSeconds < 5, Body);
+             () => Stopwatch.Elapsed.TotalMilliseconds < 4900, Body);
+        ;
+        var iterations = Iterations.Count;
         Stopwatch.Stop();
         var totalSeconds = Stopwatch.ElapsedTicks / 1_000_000_000m;
-        Console.WriteLine($"{Iterations.Count};{totalSeconds};");
+        Console.WriteLine($"{iterations};{totalSeconds};");
     }
 
     private static async void Body(ParallelLoopState _)
@@ -33,12 +35,11 @@ public static class Program
         while (Stopwatch.Elapsed.TotalSeconds < 5)
         {
             //await DoWork();
-
-            Iterations.Add(1);
-
-            /*for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 100000; i++)
             {
-            }*/
+                Iterations.Add(1);
+
+            }
         }
     }   
 
