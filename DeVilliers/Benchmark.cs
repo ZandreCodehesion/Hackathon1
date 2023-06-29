@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -9,8 +10,7 @@ public static class Benchmark
 {
     public static async Task<string> CalculateBenchmark(int timeInMilliseconds)
     {
-        var randomGenerator = new Random();
-        var algorithmResult = DoWork(randomGenerator);
+        var algorithmResult = DoWork(1000000);
         var isSuccessfulAlgorithm = await VerifyAlgorithmOutput(algorithmResult);
         if (!isSuccessfulAlgorithm)
         {
@@ -21,41 +21,45 @@ public static class Benchmark
         stopwatch.Start();
         while (stopwatch.ElapsedMilliseconds < timeInMilliseconds)
         {
-            DoWork(randomGenerator);
+            DoWork(1000000);
             counter++;
         }
         stopwatch.Stop();
         decimal totalSeconds = stopwatch.ElapsedTicks / 1_000_000_000;
         return $"{counter};{totalSeconds};";
     }
-
-    public static int[] DoWork(Random randomGenerator)
+    
+    static int[] DoWork(int limit)
     {
-        var result = new List<int>();
-        var x = randomGenerator.Next(1_000);
-        var y = randomGenerator.Next(1_000);
-        var z = randomGenerator.Next(1_000);
-
-        var length = Math.Sqrt((x * x) + (y * y) + (z * z));
-
-        var xUnit = x / length;
-        var yUnit = y / length;
-        var zUnit = z / length;
-
-        var lengthUNIT = Math.Sqrt((xUnit * xUnit) + (yUnit * yUnit) + (zUnit * zUnit));
-
-        if (((lengthUNIT - 1) * (lengthUNIT - 1)) > 0.0003)
+        bool[] isPrime = new bool[limit + 1];
+        for (int i = 2; i <= limit; i++)
         {
-            throw new Exception($"Unit Variable Calculation is wrong {lengthUNIT} from {x},{y},{z} to {xUnit},{yUnit},{zUnit}");
+            isPrime[i] = true;
         }
-
-
-        result.Add(x);
-        result.Add(y);
-        result.Add(z);
-        return result.ToArray();
+        
+        for (int i = 2; i * i <= limit; i++)
+        {
+            if (isPrime[i])
+            {
+                for (int j = (int)Math.Pow(i,2); j <= limit; j += i)
+                {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        
+        List<int> primes = new List<int>();
+        for (int i = 2; i <= limit; i++)
+        {
+            if (isPrime[i])
+            {
+                primes.Add(i);
+            }
+        }
+        
+        return primes.ToArray();
     }
-
+    
     public static async Task<bool> VerifyAlgorithmOutput(int[] algorithmOutput)
     {
         var client = new HttpClient();
