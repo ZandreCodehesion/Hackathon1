@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <bitset>
 #include <ctime>
 #include <thread>
 #include <cmath>
@@ -125,7 +126,7 @@ class Worker
       }
 
       int sieveSize = (limit - 1) / 2 + 1;
-      vector<bool> isComposite; // Use bitset instead of vector<bool>
+      bitset<1000000> isComposite; // Use bitset instead of vector<bool>
       int sqrtLimit = static_cast<int>(sqrt(limit)) + 1;
 
       for (int i = 3; i <= sqrtLimit; i += 2) {
