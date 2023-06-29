@@ -8,7 +8,7 @@ RUN dotnet restore
 
 # copy everything else and publish
 COPY . ./
-RUN dotnet publish -c Release -o out /p:UseSharedCompilation=false /p:BuildInParallel=true /m:6
+RUN dotnet publish -c Release -o out /p:UseSharedCompilation=false /p:BuildInParallel=true /m:4
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/runtime:7.0
