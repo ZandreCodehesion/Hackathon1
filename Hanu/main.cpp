@@ -28,7 +28,7 @@ size_t callback(const char* in, size_t size, size_t num, std::string* out) {
 class Http 
 {
     public:
-    void makeReq(string payload)
+    bool makeReq(string payload)
     {
         const std::string url("https://hackathon-validator.vercel.app/api/verify");
         const std::string json_payload(payload);  // You can replace it with your own JSON payload
@@ -62,21 +62,25 @@ class Http
         curl_easy_cleanup(curl);
 
         if (httpCode == 200) {
-            std::cout << "\nGot successful response from " << url << std::endl;
+            //std::cout << "\nGot successful response from " << url << std::endl;
 
             // Response looks good - done using Curl now.  Try to parse the results
             // and print them out.
             json jsonData = json::parse(*httpData);
-            bool success = jsonData["success"];
-            std::string message = jsonData["message"];
 
-            if(success) {
-                std::cout << "Message: " << message << std::endl;
-            }
+            bool success = jsonData["success"];
+
+            if(success)
+                return true;
+            
+            if(!success)
+                return false;
         }
         else {
-            std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
+            return false;
         }
+
+        return false;
     }
 };
 
@@ -84,12 +88,39 @@ class Worker
 {
     public:
         int random;
-
+        
         void do_some_work()
         {
             random = rand() % (1000000);
         }
+
+        void unit_vector()
+        {
+            int x = rand() % (1000);
+            int y = rand() % (1000);
+            int z = rand() % (1000);
+
+            double length = sqrt(((x * x) + (y * y) + (z * z)));
+
+            //cout << x << ',' << y <<',' << z << endl;
+            //cout << length <<endl;
+
+            double x_l = x / length; 
+            double y_l = y / length; 
+            double z_l = z / length;
+            
+            //cout<< get<0>(unit_vector) << ',' << get<1>(unit_vector) << ',' << get<2>(unit_vector) << endl;
+
+            double unit_length = sqrt(((x_l * x_l) + (y_l * y_l) + (z_l * z_l)));
+
+            if (((unit_length - 1)*(unit_length - 1)) > 0.003)
+            {
+                exit(1);
+            }
+            //cout<< unit_length << endl;
+        }
 };
+
 
 int main() {
 
@@ -126,10 +157,15 @@ int main() {
     }
     o << "]\"";
     s = o.str();
+
     //cout<<s<<'\n';
 
-    //http.makeReq(s);
+    if(!(http.makeReq(s)))
+    {
+        exit(1);
+    }
 
+    //worker.unit_vector();
     // End init
 
     int count = 0;
@@ -139,7 +175,7 @@ int main() {
     while(true)
     {
         // Put the code to be tested below
-        worker.do_some_work();
+        worker.unit_vector();
         // End of tested code
 
         count++;
