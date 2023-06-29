@@ -113,7 +113,7 @@ public class main  {
         }
         Date now = new Date();
         long time = (now.getTime() - data.getStartDate().getTime())/1000;
-        System.out.println(data.getItterations()+";"+ time);
+        System.out.println(data.getItterations()+";"+ time+";");
         System.exit(0);
     }
 }
