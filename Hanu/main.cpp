@@ -7,6 +7,7 @@
 #include <list>
 #include <cmath>
 #include <map>
+#include <bitset>
 
 #include <curl/curl.h>
 #include <iterator>
@@ -172,8 +173,8 @@ bool validator()
 int main() {
 
     // Bit arrays
-    //bitset<10> bit_array;
-    //bit_array.set().all();
+    std::bitset<10> bit_array;
+    bit_array.set().all();
 
     // String to charr array
     string test = "thisIsSomRandomTestString";
