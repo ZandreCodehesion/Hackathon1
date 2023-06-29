@@ -26,15 +26,22 @@ public class TreadRunner extends Thread{
         return primeNumbers;
     }
 
-    private boolean isPrime(int number) 
-    {
-        if(number <= 2)
-            return number == 2;
-        else
-            return  (number % 2) != 0
-                &&
-                IntStream.rangeClosed(3, (int) Math.sqrt(number))
-                .filter(n -> n % 2 != 0)
-                    .noneMatch(n -> (number % n == 0));
+    public  boolean isPrime(int n){
+    
+        if (n <= 1)
+            return false;
+            
+        if (n == 2 || n == 3)
+            return true;
+            
+        if (n % 3 == 0)
+            return false;
+        
+        for (int i = 5; i <= Math.sqrt(n); i = i + 6)
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+
+        return true;
     }
+  
 }

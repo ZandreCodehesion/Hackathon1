@@ -20,10 +20,10 @@ public class main  {
 
 
     private static void start () {
-        ArrayList<Integer> primeNumbers = getPrimeNumbers();
-        String primeStringArray = listToString(primeNumbers);
-        boolean isValid = HttpVerification(primeStringArray);
-        if(!isValid) return;
+        // ArrayList<Integer> primeNumbers = getPrimeNumbers();
+        // String primeStringArray = listToString(primeNumbers);
+        // boolean isValid = HttpVerification(primeStringArray);
+        // if(!isValid) return;
 
         startTreads();
     }
@@ -47,17 +47,24 @@ public class main  {
         return primeNumbers;
     }
 
-     private static boolean isPrime(int number) 
-    {
-        if(number <= 2)
-            return number == 2;
-        else
-            return  (number % 2) != 0
-                &&
-                IntStream.rangeClosed(3, (int) Math.sqrt(number))
-                .filter(n -> n % 2 != 0)
-                    .noneMatch(n -> (number % n == 0));
+     public static boolean isPrime(int n){
+    
+        if (n <= 1)
+            return false;
+            
+        if (n == 2 || n == 3)
+            return true;
+            
+        if (n % 3 == 0)
+            return false;
+        
+        for (int i = 5; i <= Math.sqrt(n); i = i + 6)
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+
+        return true;
     }
+  
     
     private static boolean HttpVerification (String requestBody){
         try {
@@ -106,7 +113,7 @@ public class main  {
         }
         Date now = new Date();
         long time = (now.getTime() - data.getStartDate().getTime())/1000;
-        System.out.println(data.getItterations()+","+ time);
+        System.out.println(data.getItterations()+";"+ time);
         System.exit(0);
     }
 }
