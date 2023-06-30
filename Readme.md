@@ -14,3 +14,7 @@
     - you can just run `make` and this will benchmark all the projects with a dockerfile and collect the data
     - you can pass in the parameter `DIRECTORY` eg `make DIRECTORY=Zandre`
     - for interpreted languages you might get some better performance with Unconfined mode eg: `make UNCONFINED=1`
+
+
+Inspiration and source
+https://github.com/PlummersSoftwareLLC/Primes
