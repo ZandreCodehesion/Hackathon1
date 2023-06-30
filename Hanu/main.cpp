@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cstdio>
 #include <sstream>
 #include <chrono>
 #include <ctime>
@@ -62,9 +62,8 @@ class Http
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
         curl_easy_cleanup(curl);
 
-        cout << httpCode << endl;
         if (httpCode == 200) {
-            std::cout << "\nGot successful response from " << url << std::endl;
+            //std::cout << "\nGot successful response from " << url << std::endl;
 
             // Response looks good - done using Curl now.  Try to parse the results
             // and print them out.
@@ -220,7 +219,11 @@ int main() {
         if(duration_cast<seconds>(steady_clock::now() - tStart).count() >= 5)
         {
             float result = duration_cast<microseconds>(steady_clock::now() - tStart).count() / 1000000.0;
-            cout << count << ";" << result << ";" << endl;
+            string out;
+            stringstream s;
+            s << count << ";" << result << ";";
+            out = s.str();
+            printf("%s",out.c_str());
             break;
         }
     }
