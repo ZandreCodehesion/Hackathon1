@@ -36,15 +36,19 @@ public static class Program
     {
         while (Stopwatch.Elapsed.TotalMilliseconds < MilliSeconds )
         {
-            for (var i = 0; i < 40; i++)
+            var tasks = new List<Task>();
+
+            for (var i = 0; i < 80; i++)
             {
-                await DoWork();
+                tasks.Add(DoWork());
                 Iterations.Add(1);
             }
+            await Task.WhenAll(tasks);
+
         }
     }   
     
-    private static async ValueTask<int[]> DoWork()
+    private static async Task<int[]> DoWork()
     {
         var primes = new List<int>();
         
