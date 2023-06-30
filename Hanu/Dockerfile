@@ -1,19 +1,21 @@
-FROM ubuntu:22.04 AS build
+FROM arm64v8/ubuntu:latest AS build
 
 RUN apt-get update -qq \
-    && apt-get install -y clang \
+    && apt-get install -y g++ \
     && apt-get install -y libcurl4-gnutls-dev
-
 
 WORKDIR /opt/app
 COPY *.cpp .
 COPY *.hpp .
 
-RUN clang++ -Ofast -std=c++17 main.cpp -o main -lcurl
+RUN g++ main.cpp -std=c++20 -o main -lcurl
 
-FROM ubuntu:22.04
+FROM arm64v8/ubuntu:latest
+
 RUN apt-get update -qq \
-    && apt-get install -y libcurl4-gnutls-dev
+    && apt-get install -y libcurl4-gnutls-dev \
+    && apt-get install -y g++
+
 
 COPY --from=build /opt/app/main /usr/local/bin
 
